@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title>web</title>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=1">
+	<!--
+    	<script src="src/js/jquery-1.11.min.js"></script>
+	-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+	<!-- UI-Router 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js"></script>
+   -->  
+	<script src="app.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    
+	<style type="text/css">
+	    .m-l-auto {
+           margin-left: auto;
+	    }
+	    .m-l-5 {
+	    	margin-left: 5px;
+	    }
+	    .m-l-10 {
+	    	margin-left: 10px;
+	    }
+	    .m-l-15 {
+	    	margin-left: 15px;
+	    }
+	    .m-l-20 {
+	    	margin-left: 20px;
+	    }
+
+	    .m-r-auto {
+	    	margin-right: auto;
+	    }
+	    .m-r-5 {
+	    	margin-right: 5px;
+	    }
+	    .m-r-10 {
+	    	margin-right: 10px;
+	    }
+	    .m-r-15 {
+	    	margin-right: 15px;
+	    }
+	    .m-r-20 {
+	    	margin-right: 20px;
+	    }
+
+	    .m-t-5 {
+	    	margin-top: 5px;
+	    }
+	    .m-t-10 {
+	    	margin-top: 10px;
+	    }
+	    .m-t-15 {
+	    	margin-top: 15px;
+	    }
+	    .m-t-20 {
+	    	margin-top: 20px;
+	    }
+
+	    .m-b-5 {
+	    	margin-bottom: 5px;
+	    }
+	    .m-b-10 {
+	    	margin-bottom: 10px;
+	    }
+	    .m-b-15 {
+	    	margin-bottom: 15px;
+	    }
+	    .m-b-20 {
+	    	margin-bottom: 20px;
+	    }
+
+	    .center {
+	    	text-align: center;
+	    }
+
+		.full-box {
+			width:100%;
+	    	height:50px;			
+		}
+
+	    .fixed {	
+			position: relative;   /*fixed;*/
+     		left: 0;
+	    }
+
+	    .bottom-0{
+			bottom: 0;	
+		}
+
+	    .bottom-50{
+			bottom: 50;	
+		}
+		.m-t-5{
+			margin-top:5px;
+		}
+        
+        .table tr td {
+        	padding:5px;
+        }
+        .list-style {
+        	list-style-type:none;
+        }
+
+		.list-style li {
+			margin-left: 35%;
+			font-size: 20px;
+			color:#D1263B;
+		}
+
+		.title {
+			color:#2E464E;
+		}
+
+		#winner {
+			height:560px;
+			overflow: auto;
+		}
+
+		.s_box{/*超級橫幅廣告（大螢幕顯示)*/
+			width: 728px;
+			height:90px;
+			background-color: #76EDCE;
+		}
+		.s_box2 {/*大型行動橫幅廣告（小螢幕顯示）*/
+			width: 320px;
+			height:100px;
+			background-color: #76EDCE;
+		}
+		.s_box3 {/*半頁廣告（大螢幕顯示）*/
+			width: 300px;
+			height:600px;
+			background-color: #76EDCE;
+		}
+
+		/*header {
+			background-color: #6AC2CC;
+		}*/
+
+		.query_box {
+			padding: 12px 0px;
+
+		}
+
+
+	</style>
+</head>
+<body>
+	<div ng-controller="mainController as main"
+	class="container m-l-auto m-r-auto">
+
+ 		<header class="row" >
+ 			<h2 ng-bind="title"></h2>
+ 		</header>
+ 		
+ 		<div class="row">
+   			<!--
+   			<div class="col-xs-12 col-sm-12 visible-sm-block 
+   			visible-md-block visible-lg-block clearfix">      			
+      			<div class="s_box">超級橫幅廣告（大螢幕顯示)</div>
+   			</div>
+   			-->
+ 			<div class="col-xs-12 col-sm-8 col-md-9">
+      			<div ng-include="main.create" 
+      			ng-show="main.work === 'editor'"></div>
+
+				<div ng-include="main.winner" 
+				ng-show="main.work === 'info'"></div>
+   			</div>
+   			<!-- 
+   			<div class="col-xs-12 col-sm-4 col-md-3 visible-sm-block 
+   			visible-md-block visible-lg-block">
+      			<div class="s_box3">半頁廣告（大螢幕顯示）</div>
+   			</div>
+   		-->
+   		</div>
+   		
+   		<footer class="row text-center">
+   			  <!-- 
+   			<div class="s_box2 col-xs-12 col-sm-6 visible-xs-block">      	
+      			大型行動橫幅廣告（小螢幕顯示）   		
+   	    	</div>
+   	    	<div class="s_box2 col-xs-12 col-sm-6 visible-xs-block"> 		
+      			大型行動橫幅廣告（小螢幕顯示）
+   	    	</div>
+   	 	-->
+   	    	<p class="col-sm-12">Copyright &copy; {{year}} All rights reserved</p>
+    	
+    	</footer>
+    
+	</div>
+</body>
+</html>
