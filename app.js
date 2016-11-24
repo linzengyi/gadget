@@ -21,46 +21,15 @@ app.controller('mainController',function($scope){
 	           	           //顯示號碼 info
         
         self.isCreate = false;
+	    
 	    self.winning = 
 	    localStorage.winning === undefined?
 	    {
 			title:'',
-			super_special:{
-				title:'特別獎 :八位數號碼與下列號碼相同者',
-				value:[]
-			},
-			special:{
-				title:'特獎 : 八位數號碼與下列號碼相同者',
-				value:[]
-			},
-			first:{
-				title:'頭獎 : 八位數號碼與下列號碼相同者',
-				value:[]
-			},
-			second:{
-				title:'二獎 : 末七碼與頭獎相同者',
-				value:null
-			},
-			third:{
-				title:'三獎 : 末六碼與頭獎相同者',
-				value:null
-			},
-			fourth:{
-				title:'四獎 : 末五碼與頭獎相同者',
-				value:null
-			},
-			fifth:{
-				title:'五獎 : 末四碼與頭獎相同者',
-				value:null
-			},
-			sixth:{
-				title:'六獎 : 末三碼與頭獎相同者',
-				value:null
-			},
-			add_sixth:{
-				title:'增開六獎 : 末3位數號碼相同者',
-				value:[]
-			}
+			super_special:[],
+			special:[],
+			first:[],
+			add_sixth:[]
 		}:angular.fromJson(localStorage.getItem('winning'));
    		
 		//console.log(self.winning);
@@ -123,14 +92,7 @@ app.controller('mainController',function($scope){
 
    
     self.add = function(id){
-   		/*
-			<li>12345678
-			  	<button type="button" class="close">
-			  		<span aria-hidden="true">&times;</span>
-			  	</button>
-			</li>
-   		*/
-
+   		
 		var code = self[id];
         if(code === ''){
            return;
@@ -148,8 +110,8 @@ app.controller('mainController',function($scope){
 		button.appendChild(span);
 		//加入移除元素
 		button.addEventListener('click',function(){
-		var li = this.parentNode;
-		li.parentNode.removeChild(li);
+			var li = this.parentNode;
+			li.parentNode.removeChild(li);
 		});
 
 		var li = document.createElement("li");
@@ -157,11 +119,68 @@ app.controller('mainController',function($scope){
 		li.appendChild(button);
 		document.getElementById(id).appendChild(li);
 		
-		self.winning[id].value.push(code);
+		self.winning[id].push(code);
 
 		self[id] = '';
 
     };
+
+    self.editor = function(){
+    	
+    	self.work = 'editor';
+        self.isCreate = localStorage.setItem('winning_create');
+		var winning = {};
+
+		if(self.winning.super_special.length !== 0){
+			winning.super_special = self.winning.super_special;
+		}
+		if(self.winning.special.length !== 0){
+			winning.special = self.winning.special;
+		}
+		if(self.winning.first.length !== 0){
+			winning.first = self.winning.first;
+		}
+		if(self.winning.add_sixth.length !== 0){
+			winning.add_sixth = self.winning.add_sixth;
+		}
+
+		for(var key in winning){
+			winning[key].forEach(function(code){
+
+				var span = document.createElement("span");
+				spanAttr = document.createAttribute('aria-hidden');
+				span.setAttributeNode(spanAttr);
+				span.setAttribute('aria-hidden',true);
+				span.innerHTML = '&times;';
+				
+				var button = document.createElement("button");
+				button.type = "button";
+				button.setAttribute('class',"close");
+				button.appendChild(span);
+				//加入移除元素
+				button.addEventListener('click',function(){
+					
+					var li = this.parentNode;
+					self.winning[li.parentNode.id].value.forEach(function(code,index){
+					    if(code === li.innerText.slice(0,(li.innerText.length-1))){
+							self.winning[li.parentNode.id].value.splice(index); 	
+					    }
+					});
+					li.parentNode.removeChild(li);
+					$scope.$apply();
+
+				});
+
+				var li = document.createElement("li");
+				li.innerHTML = code;
+				li.appendChild(button);
+				document.getElementById(key).appendChild(li);
+				
+			});
+		}
+
+    };
+    
 
     self.change = function(){
 		self.winning.title = '統ㄧ發票 '+self.month.value+'中獎號碼';
@@ -171,6 +190,7 @@ app.controller('mainController',function($scope){
     	self.work = 'info';
     	self.isCreate = true;
 		localStorage.setItem('winning',angular.toJson(self.winning));
+    	localStorage.setItem('winning_create',self.isCreate);
     };
 
     //兌獎
@@ -179,13 +199,13 @@ app.controller('mainController',function($scope){
 
     self.check = function(){
 		//特別獎號碼 
-		var super_speical = self.winning.super_special.value;
+		var super_speical = self.winning.super_special;
 		//特獎號碼
-		var speical = self.winning.special.value;
+		var speical = self.winning.special;
 		//頭獎號碼
-		var first = self.winning.first.value;
+		var first = self.winning.first;
 		//增開六獎號碼
-		var add_sixth = self.winning.add_sixth.value;
+		var add_sixth = self.winning.add_sixth;
 
 		//固定
 		var input = self.code;
@@ -290,7 +310,12 @@ app.controller('mainController',function($scope){
 		}
       	console.log(msg);
       	self.result = msg;
+      	self.code = '';
     }
+
+    self.clear = function(){
+		localStorage.removeItem('winning')
+    };
 
 });
 

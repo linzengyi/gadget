@@ -2,10 +2,11 @@
 	<div class="text-left">
   		<button class="btn btn-primary" 
   		ng-show="!main.isCreate"
-  		ng-click="main.work='editor'">建立號碼</button>
+  		ng-click="main.editor()">建立號碼</button>
   		<button class="btn btn-danger" 
   		ng-show="main.isCreate"
-  		ng-click="main.work='editor'">重置</button>
+  		ng-click="main.editor()">重置</button>
+  		<button class="btn btn-default" ng-click="main.clear()">清除獎號</button>
 	</div>
 	<div class="table-responsive">
 	  	<table class="table table-bordered table-condensed">
@@ -13,69 +14,69 @@
 		    	<td class="h3">{{main.winning.title}}</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.super_special.title}}</td>
+		    	<td>特別獎 : 八位數號碼與下列號碼相同者</td>
 		    </tr>
 		     <tr>
 		    	<td class="warning">
 		    		<ol class="list-style">
-						<li ng-repeat="code in main.winning.super_special.value">
+						<li ng-repeat="code in main.winning.super_special">
 							{{code}}</li>
 					</ol>
 				</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.special.title}}</td>
+		    	<td>特獎 : 八位數號碼與下列號碼相同者</td>
 		    </tr>
 		     <tr>
 		    	<td class="warning">
 		    		<ol class="list-style">
-					  <li ng-repeat="code in main.winning.special.value">
+					  <li ng-repeat="code in main.winning.special">
 							{{code}}</li>
 					</ol>
 				</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.first.title}}</td>
+		    	<td>頭獎 : 八位數號碼與下列號碼相同者</td>
 		    </tr>
 		     <tr>
 		    	<td class="warning">
 		    		<ol class="list-style">
-					  	<li ng-repeat="code in main.winning.first.value">
+					  	<li ng-repeat="code in main.winning.first">
 							{{code}}</li>
 					</ol>
 				</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.second.title}}</td>
+		    	<td>二獎 : 末七碼與頭獎相同者</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.third.title}}</td>
+		    	<td>三獎 : 末六碼與頭獎相同者</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.fourth.title}}</td>
+		    	<td>四獎 : 末五碼與頭獎相同者</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.fifth.title}}</td>
+		    	<td>五獎 : 末四碼與頭獎相同者</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.sixth.title}}</td>
+		    	<td>六獎 : 末三碼與頭獎相同者</td>
 		    </tr>
 		    <tr class="text-center success">
-		    	<td>{{main.winning.add_sixth.title}}</td>
+		    	<td>增開六獎 : 末3位數號碼相同者</td>
 		    </tr>
 		    <tr>
 		    	<td class="warning">
 		    		<ol class="list-style">
-					  	<li ng-repeat="code in main.winning.add_sixth.value">
+					  	<li ng-repeat="code in main.winning.add_sixth">
 							{{code}}</li>
 					</ol>
 				</td>
 		    </tr>
 	  	</table>
 	</div>
-</div>  
+</div>        				
 
-<div class="col-sm-4 query_box">
+<div class="col-sm-5 query_box">
     <span class="h4">號碼查詢:</span>
     <form class="form-horizontal" role="form">
 	    <div class="form-group">      					
@@ -104,7 +105,4 @@
 	  </ul>
 	</div>
 -->
-</div>
-      				
-      				
-      				
+</div>      				
