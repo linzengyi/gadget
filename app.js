@@ -1,6 +1,7 @@
 var app = angular.module('app',[]);
 app.run(function($rootScope){
-	$rootScope.title = '統ㄧ發票兌獎';
+	$rootScope.webTitle = '統ㄧ發票兌獎';
+	//$rootScope.Title = '統ㄧ發票兌獎';
    	$rootScope.year = new Date().getFullYear();
 });
 
@@ -20,8 +21,9 @@ app.controller('mainController',function($scope){
 	    self.work = "info";//建立號碼 editor
 	           	           //顯示號碼 info
         
-        self.isCreate = false;
-	    
+        self.reView = false;
+	    self.isCreate = localStorage.getItem('winning_create')
+		!== null?true:false;
 	    self.winning = 
 	    localStorage.winning === undefined?
 	    {
@@ -57,78 +59,52 @@ app.controller('mainController',function($scope){
    		{
    			label:'11,12月',
    			value:'11,12月'
-   		}];  		
-   		
+   		}];  
+
+   		var month = null;
 		switch(new Date().getMonth()){
 			case 0:
 			case 1:
-				self.month = self.months[0];
+				month = self.months[0];
 				break;
 			case 2:
 			case 3:
-				self.month = self.months[1];
+				month = self.months[1];
 				break;
 			case 4:
 			case 5:
-				self.month = self.months[2];
+				month = self.months[2];
 				break;
 			case 6:
 			case 7:
-				self.month = self.months[3];
+				month = self.months[3];
 				break;
 			case 8:
 			case 9:
-				self.month = self.months[4];
+				month = self.months[4];
 				break;
 			case 10:
 			case 11:
-				self.month = self.months[5];
+				month = self.months[5];
 				break;
 		}
 
-		self.winning.title = '統ㄧ發票 '+self.month.value+'中獎號碼';
+		self.month = localStorage.getItem('winning_month') !== null?
+		angular.fromJson(localStorage.getItem('winning_month')):
+		month;
+
+	//	console.log('month init');
+   	//	console.log(localStorage.getItem('winning_month'));
+
+		self.winning.title = '統ㄧ發票'+self.month.value+'中獎號碼';
    	
    	})();
-
-   
-    self.add = function(id){
-   		
-		var code = self[id];
-        if(code === ''){
-           return;
-        }
-
-		var span = document.createElement("span");
-		spanAttr = document.createAttribute('aria-hidden');
-		span.setAttributeNode(spanAttr);
-		span.setAttribute('aria-hidden',true);
-		span.innerHTML = '&times;';
-		
-		var button = document.createElement("button");
-		button.type = "button";
-		button.setAttribute('class',"close");
-		button.appendChild(span);
-		//加入移除元素
-		button.addEventListener('click',function(){
-			var li = this.parentNode;
-			li.parentNode.removeChild(li);
-		});
-
-		var li = document.createElement("li");
-		li.innerHTML = code;
-		li.appendChild(button);
-		document.getElementById(id).appendChild(li);
-		
-		self.winning[id].push(code);
-
-		self[id] = '';
-
-    };
 
     self.editor = function(){
     	
     	self.work = 'editor';
-        self.isCreate = localStorage.setItem('winning_create');
+        self.isCreate = localStorage.getItem('winning_create')
+		!== null?true:false;
 		var winning = {};
 
 		if(self.winning.super_special.length !== 0){
@@ -144,39 +120,43 @@ app.controller('mainController',function($scope){
 			winning.add_sixth = self.winning.add_sixth;
 		}
 
-		for(var key in winning){
-			winning[key].forEach(function(code){
+		if(!self.reView){
 
-				var span = document.createElement("span");
-				spanAttr = document.createAttribute('aria-hidden');
-				span.setAttributeNode(spanAttr);
-				span.setAttribute('aria-hidden',true);
-				span.innerHTML = '&times;';
-				
-				var button = document.createElement("button");
-				button.type = "button";
-				button.setAttribute('class',"close");
-				button.appendChild(span);
-				//加入移除元素
-				button.addEventListener('click',function(){
+			for(var key in winning){
+				winning[key].forEach(function(code){
+
+					var span = document.createElement("span");
+					spanAttr = document.createAttribute('aria-hidden');
+					span.setAttributeNode(spanAttr);
+					span.setAttribute('aria-hidden',true);
+					span.innerHTML = '&times;';
 					
-					var li = this.parentNode;
-					self.winning[li.parentNode.id].value.forEach(function(code,index){
-					    if(code === li.innerText.slice(0,(li.innerText.length-1))){
-							self.winning[li.parentNode.id].value.splice(index); 	
-					    }
+					var button = document.createElement("button");
+					button.type = "button";
+					button.setAttribute('class',"close");
+					button.appendChild(span);
+					//加入移除元素
+					button.addEventListener('click',function(){
+						
+						var li = this.parentNode;
+						self.winning[li.parentNode.id].forEach(function(code,index){
+						    if(code === li.innerText.slice(0,(li.innerText.length-1))){
+								self.winning[li.parentNode.id].splice(index); 	
+						    }
+						});
+						li.parentNode.removeChild(li);
+						$scope.$apply();
+
 					});
-					li.parentNode.removeChild(li);
-					$scope.$apply();
 
+					var li = document.createElement("li");
+					li.innerHTML = code;
+					li.appendChild(button);
+					document.getElementById(key).appendChild(li);
+					
 				});
+			}
 
-				var li = document.createElement("li");
-				li.innerHTML = code;
-				li.appendChild(button);
-				document.getElementById(key).appendChild(li);
-				
-			});
 		}
 
     };
@@ -189,6 +169,8 @@ app.controller('mainController',function($scope){
     self.ok = function(){
     	self.work = 'info';
     	self.isCreate = true;
+    	self.reView = true;
+    	localStorage.setItem('winning_month',angular.toJson(self.month));
 		localStorage.setItem('winning',angular.toJson(self.winning));
     	localStorage.setItem('winning_create',self.isCreate);
     };
@@ -231,7 +213,7 @@ app.controller('mainController',function($scope){
     
     		input_code_length = input_code.length;
     
-    		console.log('start = '+check_code +'-'+input_code);
+    		//console.log('start = '+check_code +'-'+input_code);
     		while(!match){
 				//輸入獎號長度
 				match_chars = input_code_length;
@@ -308,13 +290,76 @@ app.controller('mainController',function($scope){
 		if(!match){
 			msg = '沒中獎';
 		}
-      	console.log(msg);
+      	
       	self.result = msg;
       	self.code = '';
-    }
+    };
+
+    self.add = function(id){
+   		
+		var code = self[id];
+        if(code === ''){
+           return;
+        }
+
+		var span = document.createElement("span");
+		spanAttr = document.createAttribute('aria-hidden');
+		span.setAttributeNode(spanAttr);
+		span.setAttribute('aria-hidden',true);
+		span.innerHTML = '&times;';
+		
+		var button = document.createElement("button");
+		button.type = "button";
+		button.setAttribute('class',"close");
+		button.appendChild(span);
+		//加入移除元素
+		button.addEventListener('click',function(){
+			var li = this.parentNode;
+			li.parentNode.removeChild(li);
+		});
+
+		var li = document.createElement("li");
+		li.innerHTML = code;
+		li.appendChild(button);
+		document.getElementById(id).appendChild(li);
+		
+		self.winning[id].push(code);
+
+		self[id] = '';
+
+    };
 
     self.clear = function(){
-		localStorage.removeItem('winning')
+		localStorage.removeItem('winning');
+        localStorage.removeItem('winning_month');
+        
+        self.isCreate = false;
+        localStorage.setItem('winning_create',false);
+        
+        //特別獎號碼 
+		self.winning.super_special = [];
+		//特獎號碼
+		self.winning.special = [];
+		//頭獎號碼
+		self.winning.first = [];
+		//增開六獎號碼
+		self.winning.add_sixth = [];
+
+		//移除元素
+		var ul = null;	
+		var fc = null;	
+		var keys = ['super_special','special','first','add_sixth'];
+		for(var i=0;i<4;i++){
+			ul = document.getElementById(keys[i]);
+			fc = ul.firstChild;
+
+			while( fc ) {
+			    ul.removeChild( fc );
+			    fc = ul.firstChild;
+			}
+		}
+
+
     };
 
 });

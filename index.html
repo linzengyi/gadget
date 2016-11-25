@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-	<title>web</title>
+	<title ng-bind="webTitle"></title>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=1">
 	<!--
@@ -127,6 +127,10 @@
 	    	padding-bottom:20px; 
 	    }
 
+        .header {
+        	width:100%;
+	    	height:100px;
+        }
 
 	    .center {
 	    	text-align: center;
@@ -204,9 +208,7 @@
 <body>
 	<div ng-controller="mainController as main"
 	class="container m-l-auto m-r-auto">
-
- 		<header class="row" >
- 			<h2 class="col-xs-12 col-sm-12 p-l-15" ng-bind="title"></h2>
+ 		<header class="row header">
  		</header>
  		
  		<div class="row">
@@ -216,11 +218,15 @@
       			<div class="s_box">超級橫幅廣告（大螢幕顯示)</div>
    			</div>
    			-->
- 			<div class="col-xs-12 col-sm-8 col-md-9">
-      			<div ng-include="main.create" 
+ 			<div class="col-xs-12 col-sm-9 col-md-9">
+      			<div 
+				class="col-md-12"
+      			ng-include="main.create" 
       			ng-show="main.work === 'editor'"></div>
 
-				<div ng-include="main.winner" 
+				<div 
+				class="col-md-12"
+				ng-include="main.winner" 
 				ng-show="main.work === 'info'"></div>
    			</div>
    			<!-- 
@@ -228,20 +234,19 @@
    			visible-md-block visible-lg-block">
       			<div class="s_box3">半頁廣告（大螢幕顯示）</div>
    			</div>
-   		-->
+   			-->
    		</div>
    		
    		<footer class="row text-center">
-   		<!-- 
+   			<!-- 
    			<div class="s_box2 col-xs-12 col-sm-6 visible-xs-block">      	
       			大型行動橫幅廣告（小螢幕顯示）   		
    	    	</div>
    	    	<div class="s_box2 col-xs-12 col-sm-6 visible-xs-block"> 		
       			大型行動橫幅廣告（小螢幕顯示）
    	    	</div>
-   	 	-->
+   	 		-->
    	    	<p class="col-sm-12">Copyright &copy; {{year}} All rights reserved</p>
-    	
     	</footer>
     
 	</div>
